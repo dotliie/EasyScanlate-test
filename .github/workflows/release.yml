@@ -58,7 +58,7 @@ jobs:
         shell: bash
         run: |
           # Download prior release for delta generation (ignore failure on first release)
-          vpk download github --repoUrl https://github.com/Liiesl/EasyScanlate --token ${{ secrets.GITHUB_TOKEN }} || true
+          vpk download github --repoUrl https://github.com/dotliie/EasyScanlate-test --token ${{ secrets.GITHUB_TOKEN }} || true
           vpk pack -u EasyScanlate -v ${{ steps.version.outputs.VERSION }} -p ./staging -e EasyScanlate.exe --packTitle EasyScanlate --packAuthors Liie --icon assets/app_icon.ico
 
       - name: Build single installer (EasyScanlate-Installer.exe)
@@ -81,7 +81,7 @@ jobs:
       - name: Publish to GitHub
         shell: bash
         run: |
-          vpk upload github --repoUrl https://github.com/Liiesl/EasyScanlate --publish --tag v${{ steps.version.outputs.VERSION }} --token ${{ secrets.GITHUB_TOKEN }} || true
+          vpk upload github --repoUrl https://github.com/dotliie/EasyScanlate-test --publish --tag v${{ steps.version.outputs.VERSION }} --token ${{ secrets.GITHUB_TOKEN }} || true
           # Upload the single installer (wrapper) as the legacy-named asset old clients poll
           gh release upload v${{ steps.version.outputs.VERSION }} EasyScanlate-Installer.exe --clobber
         env:
