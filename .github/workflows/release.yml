@@ -79,19 +79,12 @@ jobs:
           # and requires it. Both Setup.exe (fresh installs) and the wrapper
           # Installer.exe (legacy auto-updater + admin migration) are published.
 
-      - name: Publish to GitHub
+      - name: Upload to GitHub (draft)
         shell: bash
         run: |
-          vpk upload github --repoUrl https://github.com/dotliie/EasyScanlate-test --publish --tag v${{ steps.version.outputs.VERSION }} --token ${{ secrets.GITHUB_TOKEN }}
+          vpk upload github --repoUrl https://github.com/dotliie/EasyScanlate-test --tag v${{ steps.version.outputs.VERSION }} --token ${{ secrets.GITHUB_TOKEN }}
           # Upload the single installer (wrapper) as the legacy-named asset old clients poll
           gh release upload v${{ steps.version.outputs.VERSION }} EasyScanlate-Installer.exe --clobber
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Verify release assets
-        shell: bash
-        run: |
-          gh release view v${{ steps.version.outputs.VERSION }} --json isDraft,assets --jq '{draft: .isDraft, assets: [.assets[].name]}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

@@ -1654,7 +1654,7 @@ fn translation_cards(query: &str) -> Vec<Element<'static, UiEvent>> {
 }
 
 fn updates_cards<S: UiState + ?Sized>(state: &S, query: &str) -> Vec<Element<'static, UiEvent>> {
-    if !matches_any(query, &["updates", "update", "version", "download", "install", "velopack", "github", "release"]) && !query.trim().is_empty() {
+    if !matches_any(query, &["updates", "update", "version", "download", "install", "velopack", "github", "release", "startup", "automatic", "auto", "check"]) && !query.trim().is_empty() {
         return Vec::new();
     }
     let current = state.update_current_version();
@@ -1666,6 +1666,17 @@ fn updates_cards<S: UiState + ?Sized>(state: &S, query: &str) -> Vec<Element<'st
 
     let mut col: Vec<Element<'static, UiEvent>> = Vec::new();
     col.push(card_header(Icon::Download, "Updates", Some("Velopack — GitHub releases dotliie/EasyScanlate-test")));
+    let auto_check = easyscanlate_settings::get(|s| s.auto_check_updates);
+    col.push(
+        column![
+            checkbox(auto_check)
+                .label("Check for updates on startup")
+                .text_size(scale::s(12.0))
+                .on_toggle(|v| UiEvent::SettingEdit(SettingEdit::AutoCheckUpdates(v))),
+            helper_text("When on, the app checks GitHub releases at startup and shows a popup when an update is found."),
+        ].spacing(scale::s(4.0)).into()
+    );
+    col.push(item_separator());
     col.push(text(format!("Current version: {}", if current.is_empty() { env!("CARGO_PKG_VERSION").to_string() } else { current.clone() })).size(scale::s(11.0)).color(MUTED_FG).into());
     col.push(item_separator());
 
