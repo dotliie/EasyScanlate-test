@@ -98,7 +98,11 @@ pub fn view<'a, S: crate::state::UiState + ?Sized>(state: &'a S) -> Element<'a, 
 
     let main = container(
         column![
-            text("Recent Projects").size(scale::s(22.0)).color(Color::WHITE),
+            row![
+                text("Recent Projects").size(scale::s(22.0)).color(Color::WHITE).width(FillLength),
+                text("v0.6.0").size(scale::s(14.0)).color(Color::from_rgb(0.4, 1.0, 0.4)),
+            ]
+            .align_y(iced::Alignment::Center),
             column![header, rows].spacing(scale::s(6.0)),
         ]
         .spacing(scale::s(16.0)),
